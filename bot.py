@@ -1,6 +1,7 @@
 from flask import Flask, request
 import telegram
 import urllib.parse
+from keep_alive import keep_alive
 
 # توکن بات تلگرام
 BOT_TOKEN = "7927361515:AAGhv5cQZz6K1aLxL-M6_sM6mqNYg8nzhxk"
@@ -30,7 +31,7 @@ def webhook():
             link_number = user_counters[user_id]
 
             # ایجاد لینک ثانویه
-            processed_link = f"https://example.com/processed?original={text}&count={link_number}"
+            processed_link = f"https://example.com/processed?original={urllib.parse.quote(text)}&count={link_number}"
             bot.send_message(chat_id=chat_id, text=f"لینک شماره {link_number} شما:\n{processed_link}")
         except Exception as e:
             bot.send_message(chat_id=chat_id, text="مشکلی در پردازش لینک وجود دارد!")
@@ -38,4 +39,5 @@ def webhook():
     return "ok"
 
 if __name__ == "__main__":
+    keep_alive()
     app.run(host='0.0.0.0', port=8080)
